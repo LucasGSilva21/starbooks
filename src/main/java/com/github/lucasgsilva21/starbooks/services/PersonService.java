@@ -28,6 +28,20 @@ public class PersonService {
         return this.mockPerson();
     }
 
+    public Person create(Person person) {
+        logger.info("Creating person!");
+        return person;
+    }
+
+    public Person update(Person person) {
+        logger.info("Updating person!");
+        return person;
+    }
+
+    public void delete(String id) {
+        logger.info("Deleting one person!");
+    }
+
     private Person mockPerson() {
         Person person = new Person();
         person.setId(counter.incrementAndGet());
