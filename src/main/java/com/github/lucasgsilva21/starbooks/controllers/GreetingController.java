@@ -1,6 +1,6 @@
 package com.github.lucasgsilva21.starbooks.controllers;
 
-import com.github.lucasgsilva21.starbooks.model.Greeting;
+import com.github.lucasgsilva21.starbooks.models.Greeting;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

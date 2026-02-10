@@ -1,7 +1,10 @@
 package com.github.lucasgsilva21.starbooks.services;
 
-import com.github.lucasgsilva21.starbooks.model.Person;
+import com.github.lucasgsilva21.starbooks.dtos.PersonDTO;
+import com.github.lucasgsilva21.starbooks.mappers.PersonMapper;
+import com.github.lucasgsilva21.starbooks.models.Person;
 import com.github.lucasgsilva21.starbooks.repositories.PersonRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,41 +17,54 @@ public class PersonService {
             Logger.getLogger(PersonService.class.getName());
 
     private final PersonRepository personRepository;
+    private final PersonMapper personMapper;
 
-    public PersonService(PersonRepository personRepository) {
+    public PersonService(PersonRepository personRepository, PersonMapper mapper) {
         this.personRepository = personRepository;
+        this.personMapper = mapper;
     }
 
-    public List<Person> findAll() {
+    public List<PersonDTO> findAll() {
         logger.info("Finding all persons");
-        return personRepository.findAll();
+        return personRepository.findAll()
+                .stream()
+                .map(personMapper::toDto)
+                .toList();
     }
 
-    public Person findById(Long id) {
+    public PersonDTO findById(Long id) {
         logger.info("Finding one person");
 
-        return personRepository.findById(id)
+        Person entity = personRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Person not found"));
+
+        return personMapper.toDto(entity);
     }
 
-    public Person create(Person person) {
+    @Transactional
+    public PersonDTO create(PersonDTO personDTO) {
         logger.info("Creating person");
-        return personRepository.save(person);
+        Person entity = personMapper.toEntity(personDTO);
+        Person saved = personRepository.save(entity);
+        return personMapper.toDto(saved);
     }
 
-    public Person update(Long id, Person person) {
+    @Transactional
+    public PersonDTO update(Long id, PersonDTO personDTO) {
         logger.info("Updating person");
         Person entity = personRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Person not found"));
 
-        entity.setFirstName(person.getFirstName());
-        entity.setLastName(person.getLastName());
-        entity.setAddress(person.getAddress());
-        entity.setGender(person.getGender());
+        entity.setFirstName(personDTO.getFirstName());
+        entity.setLastName(personDTO.getLastName());
+        entity.setAddress(personDTO.getAddress());
+        entity.setGender(personDTO.getGender());
 
-        return personRepository.save(entity);
+        Person updated = personRepository.save(entity);
+        return personMapper.toDto(updated);
     }
 
+    @Transactional
     public void delete(Long id) {
         logger.info("Deleting one person");
         Person entity = personRepository.findById(id)

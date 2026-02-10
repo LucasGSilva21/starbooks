@@ -1,10 +1,9 @@
-package com.github.lucasgsilva21.starbooks.model;
+package com.github.lucasgsilva21.starbooks.models;
 
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "person")
@@ -17,7 +16,7 @@ public class Person implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "firt_name", nullable = false, length = 80)
+    @Column(name = "first_name", nullable = false, length = 80)
     private String firstName;
 
     @Column(name = "last_name", nullable = false, length = 80)
@@ -73,12 +72,13 @@ public class Person implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Person person)) return false;
-        return Objects.equals(getId(), person.getId()) && Objects.equals(getFirstName(), person.getFirstName()) && Objects.equals(getLastName(), person.getLastName()) && Objects.equals(getAddress(), person.getAddress()) && Objects.equals(getGender(), person.getGender());
+        if (this == o) return true;
+        if (!(o instanceof Person other)) return false;
+        return id != null && id.equals(other.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getAddress(), getGender());
+        return getClass().hashCode();
     }
 }

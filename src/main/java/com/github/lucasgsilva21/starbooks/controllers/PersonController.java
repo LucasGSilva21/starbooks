@@ -1,6 +1,6 @@
 package com.github.lucasgsilva21.starbooks.controllers;
 
-import com.github.lucasgsilva21.starbooks.model.Person;
+import com.github.lucasgsilva21.starbooks.dtos.PersonDTO;
 import com.github.lucasgsilva21.starbooks.services.PersonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,12 +23,12 @@ public class PersonController {
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Person> findById(@PathVariable Long id) {
+    public ResponseEntity<PersonDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Person>> findAll() {
+    public ResponseEntity<List<PersonDTO>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
@@ -36,8 +36,8 @@ public class PersonController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Person> create(@RequestBody Person person) {
-        Person saved = service.create(person);
+    public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO personDTO) {
+        PersonDTO saved = service.create(personDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -49,11 +49,11 @@ public class PersonController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Person> update(
+    public ResponseEntity<PersonDTO> update(
             @PathVariable Long id,
-            @RequestBody Person person
+            @RequestBody PersonDTO personDTO
     ) {
-        return ResponseEntity.ok(service.update(id, person));
+        return ResponseEntity.ok(service.update(id, personDTO));
     }
 
     @DeleteMapping(value = "/{id}")
